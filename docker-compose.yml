@@ -1,16 +1,43 @@
-version: '3.9'
 services:
-  checkcle:
-    image: operacle/checkcle:latest
-    container_name: checkcle
+  pocketbase:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.pocketbase
+    container_name: checkcle-pocketbase
     restart: unless-stopped
-    ports:
-      - "8090:8090" # Map ports for external access, if local only "127.0.0.1:8090:8090"
+    expose:
+      - "8090"
     volumes:
-      - /opt/pb_data:/mnt/pb_data  # Mount persistent data
-
-    # Optional: set user limits
+      - /opt/pb_data:/mnt/pb_data
     ulimits:
       nofile:
         soft: 4096
         hard: 8192
+
+  service-operation:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.service-operation
+    container_name: checkcle-service-operation
+    restart: unless-stopped
+    depends_on:
+      - pocketbase
+    env_file:
+      - server/service-operation/.env
+    environment:
+      - POCKETBASE_URL=http://pocketbase:8090
+    cap_add:
+      - NET_RAW
+    expose:
+      - "8091"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    container_name: checkcle
+    restart: unless-stopped
+    ports:
+      - "8090:80"
+    depends_on:
+      - pocketbase

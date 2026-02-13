@@ -1,0 +1,19 @@
+FROM alpine:3.20
+
+RUN apk add --no-cache ca-certificates curl
+
+WORKDIR /app
+
+# Copy pre-compiled PocketBase binary
+COPY server/pocketbase /app/pocketbase
+RUN chmod +x /app/pocketbase
+
+# Copy migrations
+COPY server/pb_migrations /app/pb_migrations
+
+# Data directory (mounted as volume)
+RUN mkdir -p /mnt/pb_data
+
+EXPOSE 8090
+
+CMD ["/app/pocketbase", "serve", "--http=0.0.0.0:8090", "--dir", "/mnt/pb_data", "--migrationsDir", "/app/pb_migrations"]

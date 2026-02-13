@@ -1,5 +1,8 @@
 .git
-server/
+server/**
+!server/pocketbase
+!server/pb_migrations
+!server/service-operation
 **/node_modules
 **/dist
 **/.next

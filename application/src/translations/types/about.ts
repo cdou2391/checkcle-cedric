@@ -1,19 +1,16 @@
 
 export interface AboutTranslations {
-  aboutCheckCle: string;
-  systemDescription: string;
-  systemVersion: string;
-  license: string;
-  mitLicense: string;
-  links: string;
-  viewOnGithub: string;
-  viewDocumentation: string;
-  followOnX: string;
-  joinDiscord: string;
-  quickActions: string;
-  quickActionsDescription: string;
-  quickTips: string;
-  releasedOn: string;
+	aboutCheckCle: string;
+	systemDescription: string;
+	systemVersion: string;
+	license: string;
+	mitLicense: string;
+	links: string;
+	viewDocumentation: string;
+	quickActions: string;
+	quickActionsDescription: string;
+	quickTips: string;
+	releasedOn: string;
 	updateSchema: string;
 	updateSchemaDesc: string;
 	mergeFieldsLabel: string;

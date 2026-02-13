@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Github, FileText, Twitter, MessageCircle, Code2, ServerIcon, FolderOpen, Database, CheckCircle } from "lucide-react";
+import { FileText, Code2, ServerIcon, FolderOpen, Database, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -73,10 +73,10 @@ export const AboutSystem: React.FC = () => {
     try {
       setIsImporting(true);
       setImportResult(null);
-      
+
       // Parse the JSON to validate it
       const collections = JSON.parse(schemaData);
-      
+
       if (!Array.isArray(collections)) {
         throw new Error("Schema must be an array of collections");
       }
@@ -108,10 +108,10 @@ export const AboutSystem: React.FC = () => {
           // Check if collection already exists
           const existingCollections = await pb.collections.getFullList();
           const existingCollection = existingCollections.find(c => c.name === collection.name);
-          
+
           if (existingCollection) {
             if (mergeFields) {
-              
+
               try {
                 // Get existing schema
                 const existingSchema = existingCollection.schema || [];
@@ -119,7 +119,7 @@ export const AboutSystem: React.FC = () => {
                 // Merge schemas - add new fields, keep existing ones
                 const mergedSchema = [...existingSchema];
                 let fieldsAdded = 0;
-                
+
                 for (const newField of newSchema) {
                   const existingFieldIndex = mergedSchema.findIndex(f => f.name === newField.name);
                   if (existingFieldIndex >= 0) {
@@ -129,13 +129,13 @@ export const AboutSystem: React.FC = () => {
                     fieldsAdded++;
                   }
                 }
-                
+
                 // Update the collection with merged schema
                 const updateData = {
                   ...collection,
                   schema: mergedSchema
                 };
-                
+
                 const updatedCollection = await pb.collections.update(existingCollection.id, updateData);
                 updatedCount++;
               } catch (mergeError) {
@@ -151,13 +151,13 @@ export const AboutSystem: React.FC = () => {
               const newCollection = await pb.collections.create(collection);
               successCount++;
             } catch (createError) {
-            
+
               // Extract more detailed error information
               let errorMessage = createError.message || createError;
               if (createError.data) {
                 // Try to extract field-specific errors
                 if (createError.data.data) {
-                  const fieldErrors = Object.entries(createError.data.data).map(([field, msgs]) => 
+                  const fieldErrors = Object.entries(createError.data.data).map(([field, msgs]) =>
                     `${field}: ${Array.isArray(msgs) ? msgs.join(', ') : msgs}`
                   ).join('; ');
                   if (fieldErrors) {
@@ -165,7 +165,7 @@ export const AboutSystem: React.FC = () => {
                   }
                 }
               }
-              
+
               throw new Error(`Failed to create collection: ${errorMessage}`);
             }
           }
@@ -227,7 +227,7 @@ export const AboutSystem: React.FC = () => {
           });
         }
       }
-      
+
     } catch (error) {
       toast({
         title: "Import Failed",
@@ -249,21 +249,21 @@ export const AboutSystem: React.FC = () => {
     try {
       setIsImporting(true);
       setImportResult(null);
-      
+
       const response = await fetch('/upload/data/pb_schema_latest.json');
-      
+
       if (!response.ok) {
         throw new Error(`Failed to load local schema: ${response.status} ${response.statusText}`);
       }
-      
+
       const schemaText = await response.text();
-      
+
       // Validate that it's valid JSON
       JSON.parse(schemaText);
-      
+
       // Directly import the schema
       await handleSchemaImport(schemaText);
-      
+
     } catch (error) {
       toast({
         title: "Import Failed",
@@ -285,9 +285,9 @@ export const AboutSystem: React.FC = () => {
       <div>
         <h1 className="text-3xl font-bold tracking-tight">{t('aboutSystem')}</h1>
       </div>
-      
+
       <Separator />
-      
+
       <div className="grid gap-8 md:grid-cols-2">
         <Card className="overflow-hidden border border-border transition-all duration-300 hover:shadow-md">
           <CardHeader className="bg-muted/50 pb-4">
@@ -317,7 +317,7 @@ export const AboutSystem: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card className="overflow-hidden border border-border transition-all duration-300 hover:shadow-md">
           <CardHeader className="bg-muted/50 pb-4">
             <CardTitle className="flex items-center gap-2">
@@ -328,21 +328,9 @@ export const AboutSystem: React.FC = () => {
           </CardHeader>
           <CardContent className="space-y-4 pt-6">
             <div className="grid grid-cols-1 gap-3">
-              <Button variant="outline" className="flex items-center justify-start gap-3 h-12 hover:bg-muted/50 transition-all duration-200" onClick={() => window.open("https://github.com/operacle/checkcle", "_blank")}>
-                <Github className={`h-5 w-5 ${theme === 'dark' ? 'text-white/80' : 'text-gray-700'}`} />
-                <span>{t('viewOnGithub')}</span>
-              </Button>
               <Button variant="outline" className="flex items-center justify-start gap-3 h-12 hover:bg-muted/50 transition-all duration-200" onClick={() => window.open("https://docs.checkcle.io", "_blank")}>
                 <FileText className={`h-5 w-5 ${theme === 'dark' ? 'text-white/80' : 'text-gray-700'}`} />
                 <span>{t('viewDocumentation')}</span>
-              </Button>
-              <Button variant="outline" className="flex items-center justify-start gap-3 h-12 hover:bg-muted/50 transition-all duration-200" onClick={() => window.open("https://x.com/checkcle_oss", "_blank")}>
-                <Twitter className={`h-5 w-5 ${theme === 'dark' ? 'text-white/80' : 'text-gray-700'}`} />
-                <span>{t('followOnX')}</span>
-              </Button>
-              <Button variant="outline" className="flex items-center justify-start gap-3 h-12 hover:bg-muted/50 transition-all duration-200" onClick={() => window.open("https://discord.gg/xs9gbubGwX", "_blank")}>
-                <MessageCircle className={`h-5 w-5 ${theme === 'dark' ? 'text-white/80' : 'text-gray-700'}`} />
-                <span>{t('joinDiscord')}</span>
               </Button>
             </div>
           </CardContent>
@@ -368,18 +356,17 @@ export const AboutSystem: React.FC = () => {
                 onCheckedChange={(checked) => setMergeFields(checked === true)}
               />
               <Label htmlFor="merge-fields" className="text-sm font-medium">
-	              {t('mergeFieldsLabel')}
+                {t('mergeFieldsLabel')}
               </Label>
             </div>
           </div>
-          
+
           <div className="flex gap-2 flex-wrap">
             <Button
               onClick={handleLoadLocalSchema}
               disabled={isImporting}
-              className={`flex items-center gap-2 transition-all duration-200 ${
-                isImporting ? 'animate-pulse' : ''
-              }`}
+              className={`flex items-center gap-2 transition-all duration-200 ${isImporting ? 'animate-pulse' : ''
+                }`}
             >
               <Database className={`h-4 w-4 ${isImporting ? 'animate-spin' : ''}`} />
               {isImporting ? t('importing') : t('clickToUpdateSchema')}
@@ -387,30 +374,26 @@ export const AboutSystem: React.FC = () => {
           </div>
 
           {importResult && (
-            <div className={`mt-4 p-4 rounded-lg border ${
-              importResult.success 
-                ? 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800' 
+            <div className={`mt-4 p-4 rounded-lg border ${importResult.success
+                ? 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800'
                 : 'bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-800'
-            } animate-in fade-in-0 slide-in-from-bottom-2 duration-300`}>
+              } animate-in fade-in-0 slide-in-from-bottom-2 duration-300`}>
               <div className="flex items-center gap-2">
-                <CheckCircle className={`h-5 w-5 ${
-                  importResult.success 
-                    ? 'text-green-600 dark:text-green-400' 
+                <CheckCircle className={`h-5 w-5 ${importResult.success
+                    ? 'text-green-600 dark:text-green-400'
                     : 'text-red-600 dark:text-red-400'
-                }`} />
-                <span className={`font-medium ${
-                  importResult.success 
-                    ? 'text-green-800 dark:text-green-200' 
+                  }`} />
+                <span className={`font-medium ${importResult.success
+                    ? 'text-green-800 dark:text-green-200'
                     : 'text-red-800 dark:text-red-200'
-                }`}>
+                  }`}>
                   {importResult.success ? t('importSuccessful') : t('importFailed')}
                 </span>
               </div>
-              <div className={`mt-2 text-sm ${
-                importResult.success 
-                  ? 'text-green-700 dark:text-green-300' 
+              <div className={`mt-2 text-sm ${importResult.success
+                  ? 'text-green-700 dark:text-green-300'
                   : 'text-red-700 dark:text-red-300'
-              }`}>
+                }`}>
                 {importResult.created > 0 && t('collectionsCreatedCount').replace('{count}', String(importResult.created))}
                 {importResult.updated > 0 && (importResult.created > 0 ? ', ' : '') + t('collectionsUpdatedCount').replace('{count}', String(importResult.updated))}
                 {importResult.skipped > 0 && ((importResult.created > 0 || importResult.updated > 0) ? ', ' : '') + t('collectionsSkippedCount').replace('{count}', String(importResult.skipped))}

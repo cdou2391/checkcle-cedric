@@ -1,15 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { AuthUser } from "@/services/authService";
 import { useTheme } from "@/contexts/ThemeContext";
-import { 
-  Moon, PanelLeft, PanelLeftClose, Sun, Globe, FileText, 
-  Github, Twitter, MessageSquare, Bell, User, Settings, 
-  LogOut, Menu, X 
+import {
+  Moon, PanelLeft, PanelLeftClose, Sun, Globe, FileText,
+  Bell, User, Settings,
+  LogOut, Menu, X
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { 
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, 
-  DropdownMenuTrigger, DropdownMenuSeparator 
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenuTrigger, DropdownMenuSeparator
 } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -54,9 +54,9 @@ export const Header = ({
     <header className="relative bg-background border-b border-border px-4 lg:px-6 flex justify-between items-center h-16 shrink-0 z-30 overflow-hidden">
       {/* Grid Pattern Overlay */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
-        <div 
+        <div
           className="w-full h-full"
-          style={{ 
+          style={{
             backgroundImage: `linear-gradient(${theme === 'dark' ? '#ffffff10' : '#00000010'} 1px, transparent 1px), 
                               linear-gradient(90deg, ${theme === 'dark' ? '#ffffff10' : '#00000010'} 1px, transparent 1px)`,
             backgroundSize: '20px 20px'
@@ -65,7 +65,7 @@ export const Header = ({
           <div className="w-full h-full backdrop-blur-[1px]"></div>
         </div>
       </div>
-      
+
       <div className="flex items-center gap-2 lg:gap-4 z-10">
         {/* Mobile Toggle */}
         <Button variant="ghost" size="icon" onClick={toggleMobileMenu} className="lg:hidden h-9 w-9">
@@ -76,56 +76,30 @@ export const Header = ({
         <Button variant="ghost" size="icon" onClick={toggleSidebar} className="hidden lg:flex h-9 w-9">
           {sidebarCollapsed ? <PanelLeft className="h-5 w-5" /> : <PanelLeftClose className="h-5 w-5" />}
         </Button>
-        
+
         <div className="flex items-center">
           <h1 className="text-sm lg:text-lg font-medium truncate max-w-[150px] lg:max-w-none">
             {greeting}, {currentUser?.name || currentUser?.email?.split('@')[0] || 'User'} 👋 ✨
           </h1>
         </div>
       </div>
-      
+
       <div className="flex items-center space-x-1 lg:space-x-3 z-10">
         {/* External Links - Hidden on small screens */}
         <div className="hidden md:flex items-center space-x-1 mr-2">
-          <Button 
-            variant="outline" 
-            size="icon" 
+          <Button
+            variant="outline"
+            size="icon"
             className="rounded-full w-8 h-8 border-border"
             onClick={() => openExternalLink('https://docs.checkcle.io')}
             title={t("documentation")}
           >
             <FileText className="h-4 w-4" />
           </Button>
-          <Button 
-            variant="outline" 
-            size="icon" 
-            className="rounded-full w-8 h-8 border-border"
-            onClick={() => openExternalLink('https://github.com/operacle/checkcle')}
-            title="GitHub"
-          >
-            <Github className="h-4 w-4" />
-          </Button>
-          <Button 
-            variant="outline" 
-            size="icon" 
-            className="rounded-full w-8 h-8 border-border"
-            onClick={() => openExternalLink('https://x.com/checkcle_oss')}
-            title="X (Twitter)"
-          >
-            <Twitter className="h-4 w-4" />
-          </Button>
-          <Button 
-            variant="outline" 
-            size="icon" 
-            className="rounded-full w-8 h-8 border-border"
-            onClick={() => openExternalLink('https://discord.gg/xs9gbubGwX')}
-            title="Discord"
-          >
-            <MessageSquare className="h-4 w-4" />
-          </Button>
-          <Button 
-            variant="outline" 
-            size="icon" 
+
+          <Button
+            variant="outline"
+            size="icon"
             className="rounded-full w-8 h-8 border-border"
             title={t("notifications")}
           >
@@ -137,7 +111,7 @@ export const Header = ({
           <span className="sr-only">Toggle theme</span>
           {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
         </Button>
-        
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon" className="rounded-full w-8 h-8 border-border">
@@ -166,7 +140,7 @@ export const Header = ({
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        
+
         <div className="h-8 w-px bg-border mx-1 hidden sm:block" />
 
         <DropdownMenu>
